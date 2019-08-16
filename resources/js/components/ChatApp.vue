@@ -1,7 +1,12 @@
 <template>
     <div class="chat-app">
-      <Conversation :contact="selectedContact" :messages="messages" @new="saveNewMessage" />
-      <ContactsList :contacts="contacts" @selected="startConversationWith" />
+      <Conversation
+        :contact="selectedContact"
+        :messages="messages"
+        @new="saveNewMessage" />
+      <ContactsList
+        :contacts="contacts"
+        @selected="startConversationWith" />
     </div>
 </template>
 
@@ -28,24 +33,37 @@ import ContactsList from './ContactsList';
           .listen('NewMessage', (e) => {
             this.handleMessage(e.message)
           });
-
-          axios.get('/contacts')
-            .then((response) =>  {
-              console.log(response);
-              this.contacts = response.data;
-            });
+          this.getContacts();
+          // axios.get('/contacts')
+          //   .then((response) =>  {
+          //     this.contacts = response.data;
+          //   })
       },
       methods: {
+        getContacts(){
+          axios.get('/contacts')
+            .then((response) =>  {
+              this.contacts = response.data;
+            })
+        },
         startConversationWith(contact) {
           axios.get(`/conversation/${contact.id}`)
             .then((response) => {
+              console.log(response.data)
               this.messages = response.data;
               this.selectedContact = contact;
-            })
+            });
+
+          axios.post(`/conversation/${contact.id}`, {
+            contact_id: contact.id
+          })
+            .then((response) => {
+              this.getContacts();
+            });
         },
 
-        saveNewMessage(text){
-          this.messages.push(text);
+        saveNewMessage(message){
+          this.messages.push(message);
         },
 
         handleMessage(message)
@@ -63,7 +81,6 @@ import ContactsList from './ContactsList';
 </script>
 
 <style lang="scss" scoped>
-
 .chat-app{
   display:flex;
 }

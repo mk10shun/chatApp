@@ -1,14 +1,21 @@
 <template>
   <div class="contacts-list">
     <ul>
-      <li v-for="(contact, index) in contacts" :key="contact.id" @click="selectContact(index, contact)" :class="{'selected' : index == selected}">
+      <li
+        v-for="(contact, index) in contacts"
+        :key="contact.id"
+        @click="selectContact(index, contact)"
+        :class="{'selected' : index == selected}">
         <div class="avatar">
-          <img :src="contact.profile_image" :alt="contact.name">
+          <img
+            :src="contact.profile_image"
+            :alt="contact.name">
         </div>
         <div class="contact">
           <p class="name">{{ contact.name }}</p>
           <p class="email">{{ contact.email }}</p>
         </div>
+        <span class="unread" v-if="contact.unread">{{contact.unread}}</span>
       </li>
     </ul>
   </div>
@@ -29,6 +36,7 @@
       },
       methods: {
         selectContact(index, contact) {
+          console.log(index, contact)
           this.selected = index;
           this.$emit('selected', contact);
         }
@@ -37,7 +45,6 @@
 </script>
 
 <style lang="scss" scoped>
-
 .contacts-list{
   flex: 2;
   max-height: 600px;
@@ -57,6 +64,22 @@
 
       &.selected {
         background: #32efcc;
+      }
+
+      span.unread {
+        background: #6cb2eb;
+        color: #fff;
+        position: absolute;
+        right: 11px;
+        display: flex;
+        font-weight: 700;
+        min-width: 20px;
+        justify-content: center;
+        align-items: center;
+        line-height: 20px;
+        font-size: 12px;
+        padding: 0 4px;
+        border-radius: 3px;
       }
 
       .avatar {
@@ -86,6 +109,7 @@
           }
         }
       }
+
     }
   }
 }

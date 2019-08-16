@@ -1869,6 +1869,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1891,22 +1896,35 @@ __webpack_require__.r(__webpack_exports__);
     Echo["private"]("messages.".concat(this.user.id)).listen('NewMessage', function (e) {
       _this.handleMessage(e.message);
     });
-    axios.get('/contacts').then(function (response) {
-      console.log(response);
-      _this.contacts = response.data;
-    });
+    this.getContacts(); // axios.get('/contacts')
+    //   .then((response) =>  {
+    //     this.contacts = response.data;
+    //   })
   },
   methods: {
-    startConversationWith: function startConversationWith(contact) {
+    getContacts: function getContacts() {
       var _this2 = this;
 
-      axios.get("/conversation/".concat(contact.id)).then(function (response) {
-        _this2.messages = response.data;
-        _this2.selectedContact = contact;
+      axios.get('/contacts').then(function (response) {
+        _this2.contacts = response.data;
       });
     },
-    saveNewMessage: function saveNewMessage(text) {
-      this.messages.push(text);
+    startConversationWith: function startConversationWith(contact) {
+      var _this3 = this;
+
+      axios.get("/conversation/".concat(contact.id)).then(function (response) {
+        console.log(response.data);
+        _this3.messages = response.data;
+        _this3.selectedContact = contact;
+      });
+      axios.post("/conversation/".concat(contact.id), {
+        contact_id: contact.id
+      }).then(function (response) {
+        _this3.getContacts();
+      });
+    },
+    saveNewMessage: function saveNewMessage(message) {
+      this.messages.push(message);
     },
     handleMessage: function handleMessage(message) {
       if (this.selectedContact && message.from == this.selectedContact.id) {
@@ -1950,6 +1968,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     contacts: {
@@ -1964,6 +1989,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     selectContact: function selectContact(index, contact) {
+      console.log(index, contact);
       this.selected = index;
       this.$emit('selected', contact);
     }
@@ -1983,6 +2009,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _MessageComposer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MessageComposer */ "./resources/js/components/MessageComposer.vue");
 /* harmony import */ var _MessageFeed__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MessageFeed */ "./resources/js/components/MessageFeed.vue");
+//
+//
+//
 //
 //
 //
@@ -2045,6 +2074,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2076,6 +2109,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -6595,7 +6631,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".contacts-list[data-v-484f3208] {\n  flex: 2;\n  max-height: 600px;\n  overflow: scroll;\n  border-left: 1px solid #a6a6a6;\n}\n.contacts-list ul[data-v-484f3208] {\n  list-style-type: none;\n  padding-left: 0;\n}\n.contacts-list ul li[data-v-484f3208] {\n  display: flex;\n  padding: 2px;\n  border-bottom: 1px solid #aaaaaa;\n  height: 80px;\n  position: relative;\n  cursor: pointer;\n}\n.contacts-list ul li.selected[data-v-484f3208] {\n  background: #32efcc;\n}\n.contacts-list ul li .avatar[data-v-484f3208] {\n  flex: 1;\n  display: flex;\n  align-items: center;\n}\n.contacts-list ul li .avatar img[data-v-484f3208] {\n  width: 35px;\n  border-radius: 50%;\n  margin: 0 auto;\n}\n.contacts-list ul li .contact[data-v-484f3208] {\n  flex: 3;\n  font-size: 10px;\n  overflow: hidden;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n}\n.contacts-list ul li .contact p[data-v-484f3208] {\n  margin: 0;\n}\n.contacts-list ul li .contact p.name[data-v-484f3208] {\n  font-weight: bold;\n}", ""]);
+exports.push([module.i, ".contacts-list[data-v-484f3208] {\n  flex: 2;\n  max-height: 600px;\n  overflow: scroll;\n  border-left: 1px solid #a6a6a6;\n}\n.contacts-list ul[data-v-484f3208] {\n  list-style-type: none;\n  padding-left: 0;\n}\n.contacts-list ul li[data-v-484f3208] {\n  display: flex;\n  padding: 2px;\n  border-bottom: 1px solid #aaaaaa;\n  height: 80px;\n  position: relative;\n  cursor: pointer;\n}\n.contacts-list ul li.selected[data-v-484f3208] {\n  background: #32efcc;\n}\n.contacts-list ul li span.unread[data-v-484f3208] {\n  background: #6cb2eb;\n  color: #fff;\n  position: absolute;\n  right: 11px;\n  display: flex;\n  font-weight: 700;\n  min-width: 20px;\n  justify-content: center;\n  align-items: center;\n  line-height: 20px;\n  font-size: 12px;\n  padding: 0 4px;\n  border-radius: 3px;\n}\n.contacts-list ul li .avatar[data-v-484f3208] {\n  flex: 1;\n  display: flex;\n  align-items: center;\n}\n.contacts-list ul li .avatar img[data-v-484f3208] {\n  width: 35px;\n  border-radius: 50%;\n  margin: 0 auto;\n}\n.contacts-list ul li .contact[data-v-484f3208] {\n  flex: 3;\n  font-size: 10px;\n  overflow: hidden;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n}\n.contacts-list ul li .contact p[data-v-484f3208] {\n  margin: 0;\n}\n.contacts-list ul li .contact p.name[data-v-484f3208] {\n  font-weight: bold;\n}", ""]);
 
 // exports
 
@@ -48547,7 +48583,13 @@ var render = function() {
               _c("p", { staticClass: "name" }, [_vm._v(_vm._s(contact.name))]),
               _vm._v(" "),
               _c("p", { staticClass: "email" }, [_vm._v(_vm._s(contact.email))])
-            ])
+            ]),
+            _vm._v(" "),
+            contact.unread
+              ? _c("span", { staticClass: "unread" }, [
+                  _vm._v(_vm._s(contact.unread))
+                ])
+              : _vm._e()
           ]
         )
       }),
